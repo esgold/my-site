@@ -41,6 +41,9 @@
 					.forecast-day .forecast-label{font-size:13px;margin-top:2px;color:rgba(255,255,255,0.8)}
 					.forecast-emoji{font-size:18px}
 					.forecast-temp{font-size:13px;font-weight:700}
+					/* top navigation in header */
+					.top-nav{display:flex;gap:18px;align-items:center;margin-left:18px}
+					.top-nav a{color:var(--muted);text-decoration:none;font-weight:600}
 
 					@media (max-width:900px){
 						.weather-card{min-width:unset;max-width:100%}
@@ -52,6 +55,11 @@
 		<header class="site-header">
 			<div class="container header-inner">
 				<h1 class="logo">Erin</h1>
+				<nav class="top-nav" aria-label="Primary">
+					<a href="about.html">About</a>
+					<a href="work.html">Work</a>
+					<a href="contact.html">Contact</a>
+				</nav>
 							<!-- Weather widget (anchor stays fixed; widget can slide left to reveal forecast) -->
 							<div class="weather-anchor" style="position:relative;display:inline-block">
 								<div id="forecast" class="forecast-panel" aria-hidden="true">
@@ -115,10 +123,7 @@
 				</div>
 			</section>
 
-			<section class="about container">
-				<h3 class="section-title">About</h3>
-				<p>I’m a designer who enjoys working at the intersection of strategy and craft. I focus on intentional systems, accessible interactions, and polished visual language. When I’m not designing, you can find me sketching, gardening, or exploring typefaces.</p>
-			</section>
+
 
 		</main>
 
