@@ -9,12 +9,29 @@
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 		<link rel="stylesheet" href="css/styles.css">
+			<style>
+				/* Weather widget styles (kept inside this HTML file) */
+				.weather-card{
+					background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
+					padding:10px 14px;border-radius:12px;display:flex;align-items:center;gap:12px;
+					box-shadow: 0 6px 20px rgba(2,6,23,0.45);min-width:160px;max-width:220px
+				}
+				.weather-emoji{font-size:22px}
+				.weather-info{display:flex;flex-direction:column}
+				.weather-temp{font-weight:700;font-size:16px;margin:0}
+				.weather-desc{font-size:13px;color:rgba(255,255,255,0.8);margin:0}
+				@media (max-width:900px){
+					.weather-card{min-width:unset;max-width:100%}
+				}
+			</style>
 	</head>
 	<body>
 		<header class="site-header">
 			<div class="container header-inner">
 				<h1 class="logo">Erin</h1>
 				<p class="tag">Designer — crafting clear, thoughtful experiences</p>
+					<!-- Weather widget (shows current temp in °F using Open-Meteo and browser location) -->
+					<div id="weather" class="weather-card" role="region" aria-live="polite">Loading weather…</div>
 			</div>
 		</header>
 
@@ -84,5 +101,71 @@
 				</nav>
 			</div>
 		</footer>
+			<script>
+			// Weather widget script — uses Open-Meteo (no API key) and browser geolocation.
+			(function(){
+				const el = document.getElementById('weather');
+				if(!el) return;
+
+				function setContent(temp, emoji, desc){
+					el.innerHTML = '';
+					const e = document.createElement('div'); e.className='weather-emoji'; e.textContent = emoji;
+					const info = document.createElement('div'); info.className = 'weather-info';
+					const t = document.createElement('p'); t.className='weather-temp'; t.textContent = `${Math.round(temp)}°F`;
+					const d = document.createElement('p'); d.className='weather-desc'; d.textContent = desc;
+					info.appendChild(t); info.appendChild(d);
+					el.appendChild(e); el.appendChild(info);
+				}
+
+				function weatherCodeToEmoji(code){
+					// Open-Meteo weathercode mapping simplified
+					if(code === 0) return ['☀️','Clear'];
+					if(code >=1 && code <=3) return ['⛅','Partly cloudy'];
+					if(code === 45 || code === 48) return ['🌫️','Fog'];
+					if(code >=51 && code <=67) return ['🌦️','Drizzle/Snow mix'];
+					if(code >=71 && code <=77) return ['❄️','Snow'];
+					if(code >=80 && code <=82) return ['🌧️','Rain showers'];
+					if(code >=95 && code <=99) return ['⛈️','Thunderstorm'];
+					return ['☁️','Cloudy'];
+				}
+
+				function showError(msg){ el.textContent = msg; }
+
+				function fetchWeather(lat, lon){
+					const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&temperature_unit=fahrenheit&windspeed_unit=mph`;
+					fetch(url).then(r=>{
+						if(!r.ok) throw new Error('Weather fetch failed');
+						return r.json();
+					}).then(data=>{
+						if(!data || !data.current_weather) throw new Error('No weather data');
+						const cw = data.current_weather;
+						const temp = cw.temperature;
+						const code = cw.weathercode;
+						const [emoji, desc] = weatherCodeToEmoji(code);
+						setContent(temp, emoji, desc);
+					}).catch(err=>{
+						console.error(err);
+						showError('Weather unavailable');
+					});
+				}
+
+						if('geolocation' in navigator){
+							navigator.geolocation.getCurrentPosition(pos=>{
+								fetchWeather(pos.coords.latitude, pos.coords.longitude);
+							}, err=>{
+								console.warn('Geolocation error', err);
+								// If the user denied permission, show a friendly, actionable message.
+								// GeolocationPositionError.PERMISSION_DENIED is usually code === 1.
+								if(err && (err.code === 1)){
+									showError('Enable location to see your weather');
+								} else {
+									showError('Location unavailable');
+								}
+							}, {timeout:10000});
+						} else {
+							showError('Geolocation not supported');
+						}
+			})();
+			</script>
 	</body>
 </html>
