@@ -5,6 +5,7 @@
   --bg:#0f1720;
   --card:#0f1720;
   --muted:rgba(255,255,255,0.7);
+  --forecast-gap:16px;
   --accent:linear-gradient(135deg,#FF7A7A 0%,#FFD36E 100%);
   --glass: rgba(255,255,255,0.06);
   --radius:16px;
@@ -58,3 +59,39 @@ h4{margin:6px 0}
   .grid{grid-template-columns:1fr}
   .header-inner{flex-direction:column;align-items:flex-start;gap:12px}
 }
+
+/* Weather widget styles (moved from inline) */
+.weather-anchor{position:relative;display:inline-block}
+.weather-wrap{position:relative;display:inline-block}
+.weather-card{
+  background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
+  padding:10px 14px;border-radius:12px;display:flex;align-items:center;gap:12px;
+  box-shadow: 0 6px 20px rgba(2,6,23,0.45);min-width:160px;max-width:220px;
+  transition:box-shadow .18s ease, transform .18s ease;
+}
+.weather-wrap:hover .weather-card{transform:translateX(6px);box-shadow:0 10px 30px rgba(2,6,23,0.6)}
+.weather-emoji{font-size:22px}
+.weather-info{display:flex;flex-direction:column;transition:transform .18s ease}
+.weather-temp{font-weight:700;font-size:16px;margin:0}
+.weather-desc{font-size:13px;color:rgba(255,255,255,0.8);margin:0}
+.weather-wrap:hover .weather-info{transform:translateX(-34px)}
+
+/* Forecast panel revealed to the right on hover; current info shifts left */
+.forecast-panel{
+  position:absolute;right:0;top:0;min-width:120px;transform:translateX(0) scale(.98);
+  display:flex;gap:8px;padding:8px;border-radius:12px;background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
+  box-shadow:0 10px 30px rgba(2,6,23,0.5);opacity:0;pointer-events:none;transition:opacity .18s ease,transform .18s ease;
+  align-items:stretch;height:100%;
+}
+.weather-anchor:hover .weather-wrap{transform:translateX(calc(var(--forecast-offset, 0) * -1));}
+.weather-anchor:hover .forecast-panel{opacity:1;transform:translateX(var(--forecast-gap)) scale(1);pointer-events:auto}
+.forecast-day{display:flex;align-items:center;gap:8px;padding:8px;border-radius:8px;height:100%;justify-content:center}
+.forecast-day .forecast-text{display:flex;flex-direction:column;align-items:flex-start}
+.forecast-day .forecast-temp{font-size:16px;font-weight:700}
+.forecast-day .forecast-label{font-size:13px;margin-top:2px;color:rgba(255,255,255,0.8)}
+.forecast-emoji{font-size:18px}
+.forecast-temp{font-size:13px;font-weight:700}
+
+/* top navigation in header */
+.top-nav{display:flex;gap:18px;align-items:center;margin-left:18px}
+.top-nav a{color:var(--muted);text-decoration:none;font-weight:600}
