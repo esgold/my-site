@@ -9,29 +9,60 @@
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 		<link rel="stylesheet" href="css/styles.css">
-			<style>
-				/* Weather widget styles (kept inside this HTML file) */
-				.weather-card{
-					background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
-					padding:10px 14px;border-radius:12px;display:flex;align-items:center;gap:12px;
-					box-shadow: 0 6px 20px rgba(2,6,23,0.45);min-width:160px;max-width:220px
-				}
-				.weather-emoji{font-size:22px}
-				.weather-info{display:flex;flex-direction:column}
-				.weather-temp{font-weight:700;font-size:16px;margin:0}
-				.weather-desc{font-size:13px;color:rgba(255,255,255,0.8);margin:0}
-				@media (max-width:900px){
-					.weather-card{min-width:unset;max-width:100%}
-				}
-			</style>
+				<style>
+					/* Weather widget styles (kept inside this HTML file) */
+					.weather-wrap{position:relative;display:inline-block}
+					.weather-card{
+						background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
+						padding:10px 14px;border-radius:12px;display:flex;align-items:center;gap:12px;
+						box-shadow: 0 6px 20px rgba(2,6,23,0.45);min-width:160px;max-width:220px;
+						transition:box-shadow .18s ease, transform .18s ease;
+					}
+					.weather-wrap:hover .weather-card{transform:translateX(6px);box-shadow:0 10px 30px rgba(2,6,23,0.6)}
+					.weather-emoji{font-size:22px}
+					.weather-info{display:flex;flex-direction:column;transition:transform .18s ease}
+					.weather-temp{font-weight:700;font-size:16px;margin:0}
+					.weather-desc{font-size:13px;color:rgba(255,255,255,0.8);margin:0}
+					.weather-wrap:hover .weather-info{transform:translateX(-34px)}
+
+					/* Forecast panel revealed to the right on hover; current info shifts left */
+					:root{--forecast-gap:16px}
+					.forecast-panel{
+						position:absolute;right:0;top:0;min-width:120px;transform:translateX(0) scale(.98);
+						display:flex;gap:8px;padding:8px;border-radius:12px;background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
+						box-shadow:0 10px 30px rgba(2,6,23,0.5);opacity:0;pointer-events:none;transition:opacity .18s ease,transform .18s ease;
+						align-items:stretch;height:100%;
+					}
+					.weather-anchor:hover .weather-wrap{transform:translateX(calc(var(--forecast-offset, 0) * -1));}
+					.weather-anchor:hover .forecast-panel{opacity:1;transform:translateX(var(--forecast-gap)) scale(1);pointer-events:auto}
+					.forecast-day{display:flex;align-items:center;gap:8px;padding:8px;border-radius:8px;height:100%;justify-content:center}
+					.forecast-day .forecast-text{display:flex;flex-direction:column;align-items:flex-start}
+					.forecast-day .forecast-temp{font-size:16px;font-weight:700}
+					.forecast-day .forecast-label{font-size:13px;margin-top:2px;color:rgba(255,255,255,0.8)}
+					.forecast-emoji{font-size:18px}
+					.forecast-temp{font-size:13px;font-weight:700}
+
+					@media (max-width:900px){
+						.weather-card{min-width:unset;max-width:100%}
+						.forecast-panel{display:none}
+					}
+				</style>
 	</head>
 	<body>
 		<header class="site-header">
 			<div class="container header-inner">
 				<h1 class="logo">Erin</h1>
-				<p class="tag">Designer — crafting clear, thoughtful experiences</p>
-					<!-- Weather widget (shows current temp in °F using Open-Meteo and browser location) -->
-					<div id="weather" class="weather-card" role="region" aria-live="polite">Loading weather…</div>
+							<!-- Weather widget (anchor stays fixed; widget can slide left to reveal forecast) -->
+							<div class="weather-anchor" style="position:relative;display:inline-block">
+								<div id="forecast" class="forecast-panel" aria-hidden="true">
+									<!-- forecast days will be injected here -->
+								</div>
+								<div class="weather-wrap" aria-hidden="false">
+									<div id="weather" class="weather-card" role="region" aria-live="polite">
+										<div class="weather-main">Loading weather…</div>
+									</div>
+								</div>
+							</div>
 			</div>
 		</header>
 
@@ -132,7 +163,7 @@
 				function showError(msg){ el.textContent = msg; }
 
 				function fetchWeather(lat, lon){
-					const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&temperature_unit=fahrenheit&windspeed_unit=mph`;
+							const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&temperature_unit=fahrenheit&windspeed_unit=mph&daily=temperature_2m_max,weathercode&timezone=auto`;
 					fetch(url).then(r=>{
 						if(!r.ok) throw new Error('Weather fetch failed');
 						return r.json();
@@ -142,7 +173,36 @@
 						const temp = cw.temperature;
 						const code = cw.weathercode;
 						const [emoji, desc] = weatherCodeToEmoji(code);
-						setContent(temp, emoji, desc);
+								setContent(temp, emoji, desc);
+								// Render 3-day forecast if available
+								const fEl = document.getElementById('forecast');
+											  if(fEl && data.daily && data.daily.time){
+												fEl.innerHTML = '';
+												// use today + next 2 days (chronological left-to-right)
+												const times = data.daily.time.slice(0,3);
+												const temps = (data.daily.temperature_2m_max || []).slice(0,3);
+												const codes = (data.daily.weathercode || []).slice(0,3);
+															for(let i=0;i<times.length;i++){
+																const day = document.createElement('div'); day.className='forecast-day';
+																const em = document.createElement('div'); em.className='forecast-emoji'; em.textContent = weatherCodeToEmoji(codes[i]||-1)[0];
+																const text = document.createElement('div'); text.className='forecast-text';
+																const tp = document.createElement('div'); tp.className='forecast-temp'; tp.textContent = `${Math.round(temps[i]||temp)}°`;
+																const dt = new Date(times[i]);
+																const label = document.createElement('div'); label.className='forecast-label'; label.textContent = dt.toLocaleDateString(undefined,{weekday:'short'}).slice(0,3);
+																text.appendChild(tp); text.appendChild(label);
+																day.appendChild(em); day.appendChild(text);
+																				fEl.appendChild(day);
+															}
+																			// after rendering, measure and set offset so the main card shifts left by exactly the forecast width + gap
+																			requestAnimationFrame(()=>{
+																				const anchor = document.querySelector('.weather-anchor');
+																				if(anchor){
+																					const gap = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--forecast-gap')) || 16;
+																					const width = Math.ceil(fEl.getBoundingClientRect().width + gap);
+																					anchor.style.setProperty('--forecast-offset', width + 'px');
+																				}
+																			});
+											}
 					}).catch(err=>{
 						console.error(err);
 						showError('Weather unavailable');
