@@ -91,3 +91,62 @@
     showError('Geolocation not supported');
   }
 })();
+
+// Improve card hover expansion to avoid flicker: toggle .is-expanded class on mouseenter/leave
+(function(){
+  const grid = document.querySelector('.grid');
+  if(!grid) return;
+  const cards = Array.from(grid.querySelectorAll('.card'));
+  let active = null;
+  let placeholder = null;
+
+  function expandCard(card){
+    if(active === card) return;
+    collapseActive();
+    const gridRect = grid.getBoundingClientRect();
+    const cardRect = card.getBoundingClientRect();
+
+    // create placeholder to preserve flow
+    placeholder = document.createElement('div');
+    placeholder.className = 'card-placeholder';
+    placeholder.style.height = `${cardRect.height}px`;
+    card.parentNode.insertBefore(placeholder, card);
+
+    // move card to absolute positioning within grid
+    card.classList.add('is-expanded');
+    card.style.position = 'absolute';
+    card.style.left = '0px';
+    card.style.width = `${grid.clientWidth}px`;
+    // top relative to grid
+    card.style.top = `${cardRect.top - gridRect.top}px`;
+
+    grid.classList.add('grid-hovering');
+    active = card;
+  }
+
+  function collapseActive(){
+    if(!active) return;
+    // restore styles
+    active.classList.remove('is-expanded');
+    active.style.position = '';
+    active.style.left = '';
+    active.style.width = '';
+    active.style.top = '';
+    if(placeholder && placeholder.parentNode) placeholder.parentNode.removeChild(placeholder);
+    placeholder = null;
+    grid.classList.remove('grid-hovering');
+    active = null;
+  }
+
+  cards.forEach(card=>{
+    card.addEventListener('mouseenter', ()=> expandCard(card));
+    card.addEventListener('mouseleave', ()=> collapseActive());
+    // also support focus/blur for keyboard
+    card.addEventListener('focusin', ()=> expandCard(card));
+    card.addEventListener('focusout', ()=> collapseActive());
+  });
+
+  // collapse on scroll or resize to avoid misplacement
+  window.addEventListener('scroll', collapseActive, {passive:true});
+  window.addEventListener('resize', collapseActive);
+})();

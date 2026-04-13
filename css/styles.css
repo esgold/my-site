@@ -44,10 +44,42 @@ body{
 
 .section-title{font-size:16px;margin:0 0 18px;color:var(--muted);font-weight:600}
 .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
-.card{background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));padding:18px;border-radius:14px}
+h4{margin:6px 0}
+.muted{color:var(--muted);font-size:14px}
+
+/* card inner container to preserve padding and background while animating content */
+.card{background:transparent;padding:0;border-radius:14px}
+.card-inner{background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));padding:18px;border-radius:14px;overflow:hidden;display:block}
 .thumb{height:140px;border-radius:10px;margin-bottom:12px}
 h4{margin:6px 0}
 .muted{color:var(--muted);font-size:14px}
+
+/* Full-width focal hover for work cards */
+.grid{position:relative}
+.card{position:relative;overflow:visible;transition:opacity .4s ease,box-shadow .4s ease}
+.thumb{display:block;width:100%;transition:height .5s cubic-bezier(.2,.9,.2,1),transform .5s cubic-bezier(.2,.9,.2,1),box-shadow .4s ease;transform-origin:left center}
+.card h4,.card .muted{transition:transform .45s cubic-bezier(.2,.9,.2,1),color .2s ease}
+
+/* When hovering anywhere over the grid, de-emphasize non-hovered cards (but keep pointer events) */
+.grid .card{opacity:1;transition:opacity .3s ease}
+.grid.grid-hovering .card{opacity:0.28}
+.grid.grid-hovering .card.is-expanded{opacity:1}
+.card.is-expanded{z-index:160}
+.card.is-expanded .card-inner{box-shadow:0 20px 50px rgba(2,6,23,0.6);padding:24px}
+.card-inner{transition:padding .28s cubic-bezier(.2,.9,.2,1),box-shadow .28s ease}
+.card.is-expanded .thumb{height:320px}
+.card.is-expanded h4{transform:scale(1.06)}
+.card.is-expanded .muted{transform:scale(1.04)}
+
+/* placeholder to reserve space when a card is absolutely positioned */
+.card-placeholder{width:100%;display:block}
+
+/* Mobile: use a much subtler effect (no grid reflow) */
+@media (max-width:900px){
+  .grid:hover .card{opacity:1;transform:none;pointer-events:auto}
+  .grid .card:hover{grid-column:auto;transform:scale(1.02);box-shadow:0 10px 30px rgba(2,6,23,0.45)}
+  .grid .card:hover .thumb{height:170px}
+}
 
 .about{margin-top:28px}
 .site-footer{padding:28px 0}
