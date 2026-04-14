@@ -67,7 +67,7 @@ h4{margin:6px 0}
   display:none;
 }
 .grid.grid-hovering .card.is-expanded{opacity:1}
-.card.is-expanded{z-index:160;overflow:hidden;grid-column:1 / -1}
+.card.is-expanded{z-index:160;overflow:visible;grid-column:1 / -1}
 
 /* When a card expands to full-width, increase its inner padding so text aligns
    with the page content (left edge of the container/gradient). Uses the
@@ -76,15 +76,21 @@ h4{margin:6px 0}
   /* keep vertical padding slightly larger for focus */
   padding-top:24px;
   padding-bottom:24px;
-  /* compute horizontal inset so content lines up with .container's inner edge */
-  padding-left: max(18px, calc((100vw - var(--container))/2 + 20px));
-  padding-right: max(18px, calc((100vw - var(--container))/2 + 20px));
+  padding-left: 20px;
+  padding-right: 20px;
+  display:flex;
+  flex-direction:column;
 }
 
 .card.is-expanded .thumb{
   height:320px;
   border-radius:10px;
-  width:100%;
+  width:calc(100vw - 40px);
+  margin-left:-20px;
+  margin-right:-20px;
+  margin-top:-24px;
+  margin-bottom:24px;
+  flex-shrink:0;
 }
 
 /* Ensure long text wraps inside the card and doesn't overflow its bounds */
@@ -95,9 +101,11 @@ h4{margin:6px 0}
   word-break:break-word;
   hyphens:auto;
 }
-.card.is-expanded .card-inner{box-shadow:0 20px 50px rgba(2,6,23,0.6);padding:24px}
+.card.is-expanded .card-inner{
+  box-shadow:0 20px 50px rgba(2,6,23,0.6);
+  /* padding values are set above to align with container; kept here for shadow */
+}
 .card-inner{transition:padding .28s cubic-bezier(.2,.9,.2,1),box-shadow .28s ease}
-.card.is-expanded .thumb{height:320px}
 .card.is-expanded h4{transform:scale(1.06)}
 .card.is-expanded .muted{transform:scale(1.04)}
 
