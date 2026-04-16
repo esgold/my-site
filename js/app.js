@@ -43,16 +43,16 @@
       const fEl = document.getElementById('forecast');
       if(fEl && data.daily && data.daily.time){
         fEl.innerHTML = '';
-        // use today + next 2 days (chronological left-to-right)
-        const times = data.daily.time.slice(0,3);
-        const temps = (data.daily.temperature_2m_max || []).slice(0,3);
-        const codes = (data.daily.weathercode || []).slice(0,3);
+        // use the next 3 days after today (skip index 0 which is today)
+        const times = data.daily.time.slice(1,4);
+        const temps = (data.daily.temperature_2m_max || []).slice(1,4);
+        const codes = (data.daily.weathercode || []).slice(1,4);
         for(let i=0;i<times.length;i++){
           const day = document.createElement('div'); day.className='forecast-day';
           const em = document.createElement('div'); em.className='forecast-emoji'; em.textContent = weatherCodeToEmoji(codes[i]||-1)[0];
           const text = document.createElement('div'); text.className='forecast-text';
           const tp = document.createElement('div'); tp.className='forecast-temp'; tp.textContent = `${Math.round(temps[i]||temp)}°`;
-          const dt = new Date(times[i]);
+          const dt = new Date(times[i] + 'T00:00:00');
           const label = document.createElement('div'); label.className='forecast-label'; label.textContent = dt.toLocaleDateString(undefined,{weekday:'short'}).slice(0,3);
           text.appendChild(tp); text.appendChild(label);
           day.appendChild(em); day.appendChild(text);

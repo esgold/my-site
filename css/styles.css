@@ -51,7 +51,7 @@ h4{margin:6px 0}
 /* card inner container to preserve padding and background while animating content */
 .card{background:transparent;padding:0;border-radius:14px}
 .card-inner{background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));padding:18px;border-radius:14px;overflow:hidden;display:block}
-.thumb{height:140px;border-radius:10px;margin-bottom:12px}
+.thumb{height:140px;border-radius:10px;margin-bottom:12px;object-fit:cover}
 h4{margin:6px 0}
 .muted{color:var(--muted);font-size:14px}
 
