@@ -20,7 +20,7 @@ body{
   margin:0;
   font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
   background: radial-gradient(1200px 600px at 10% 10%, rgba(255,122,122,0.06), transparent),
-              linear-gradient(180deg, #071120 0%, #06111a 100%);
+              #06111a;
   color:#fff;
   -webkit-font-smoothing:antialiased;
   -moz-osx-font-smoothing:grayscale;
@@ -73,23 +73,19 @@ h4{margin:6px 0}
    with the page content (left edge of the container/gradient). Uses the
    container width variable to compute the horizontal inset responsively. */
 .card.is-expanded .card-inner{
-  /* keep vertical padding slightly larger for focus */
-  padding-top:24px;
-  padding-bottom:24px;
-  padding-left: 20px;
-  padding-right: 20px;
+  padding:20px;
+  background: #06111a;
   display:flex;
   flex-direction:column;
+  overflow:hidden;
+  box-shadow:0 20px 50px rgba(2,6,23,0.6);
 }
 
 .card.is-expanded .thumb{
   height:320px;
   border-radius:10px;
-  width:calc(100vw - 40px);
-  margin-left:-20px;
-  margin-right:-20px;
-  margin-top:-24px;
-  margin-bottom:24px;
+  width:100%;
+  margin:0 0 20px;
   flex-shrink:0;
 }
 
@@ -101,13 +97,9 @@ h4{margin:6px 0}
   word-break:break-word;
   hyphens:auto;
 }
-.card.is-expanded .card-inner{
-  box-shadow:0 20px 50px rgba(2,6,23,0.6);
-  /* padding values are set above to align with container; kept here for shadow */
-}
 .card-inner{transition:padding .28s cubic-bezier(.2,.9,.2,1),box-shadow .28s ease}
-.card.is-expanded h4{transform:scale(1.06)}
-.card.is-expanded .muted{transform:scale(1.04)}
+.card.is-expanded h4{transform:none}
+.card.is-expanded .muted{transform:none}
 
 /* placeholder to reserve space when a card is absolutely positioned */
 .card-placeholder{width:100%;display:block}
@@ -120,8 +112,8 @@ h4{margin:6px 0}
 }
 
 .about{margin-top:28px}
-.site-footer{padding:28px 0;background:transparent}
-.site-footer, .footer-inner{background:transparent}
+.site-footer{padding:28px 0;background:#06111a;position:relative;z-index:180}
+.site-footer, .footer-inner{background:#06111a}
 .footer-inner{display:flex;align-items:center;justify-content:space-between;color:var(--muted)}
 .small-nav a{color:var(--muted);text-decoration:none;margin-left:12px}
 
@@ -166,3 +158,10 @@ h4{margin:6px 0}
 /* top navigation in header */
 .top-nav{display:flex;gap:18px;align-items:center;margin-left:18px}
 .top-nav a{color:var(--muted);text-decoration:none;font-weight:600}
+
+/* Hide About / Work / Contact top-nav links */
+.top-nav a[href="about.html"],
+.top-nav a[href="work.html"],
+.top-nav a[href="contact.html"]{
+  display:none !important;
+}
