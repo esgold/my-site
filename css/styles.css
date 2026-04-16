@@ -42,7 +42,7 @@ body{
 .hero-card{display:none}
 .hero-graphic{display:none}
 
-.section-title{font-size:16px;margin:-24px 0 18px;color:var(--muted);font-weight:600;text-align:center}
+.section-title{font-size:16px;margin:0 0 42px;color:var(--muted);font-weight:600;text-align:center}
 .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
 .grid{align-items:start}
 h4{margin:6px 0}
@@ -111,7 +111,7 @@ h4{margin:6px 0}
   .grid .card:hover .thumb{height:170px}
 }
 
-.about{margin-top:28px}
+.work.container{padding-top:24px}
 .site-footer{padding:28px 0;background:#f5f3f0;position:relative;z-index:180}
 .site-footer, .footer-inner{background:#f5f3f0}
 .footer-inner{display:flex;align-items:center;justify-content:space-between;color:var(--muted);max-width:var(--container);margin:0 auto;padding:0 20px}
