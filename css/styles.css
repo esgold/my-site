@@ -19,8 +19,7 @@ html,body{height:100%}
 body{
   margin:0;
   font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
-  background: radial-gradient(1200px 600px at 10% 10%, rgba(255,122,122,0.04), transparent),
-              #f5f3f0;
+  background: #f5f3f0;
   color:#1a1a1a;
   -webkit-font-smoothing:antialiased;
   -moz-osx-font-smoothing:grayscale;
@@ -43,7 +42,7 @@ body{
 .hero-card{display:none}
 .hero-graphic{display:none}
 
-.section-title{font-size:16px;margin:0 0 18px;color:var(--muted);font-weight:600}
+.section-title{font-size:16px;margin:-24px 0 18px;color:var(--muted);font-weight:600;text-align:center}
 .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
 .grid{align-items:start}
 h4{margin:6px 0}
@@ -115,7 +114,7 @@ h4{margin:6px 0}
 .about{margin-top:28px}
 .site-footer{padding:28px 0;background:#f5f3f0;position:relative;z-index:180}
 .site-footer, .footer-inner{background:#f5f3f0}
-.footer-inner{display:flex;align-items:center;justify-content:space-between;color:var(--muted)}
+.footer-inner{display:flex;align-items:center;justify-content:space-between;color:var(--muted);max-width:var(--container);margin:0 auto;padding:0 20px}
 .small-nav a{color:var(--muted);text-decoration:none;margin-left:12px}
 
 @media (max-width:900px){

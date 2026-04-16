@@ -38,7 +38,7 @@
       const temp = cw.temperature;
       const code = cw.weathercode;
       const [emoji, desc] = weatherCodeToEmoji(code);
-      setContent(temp, emoji, desc);
+      setContent(temp, emoji, 'Today');
       // Render 3-day forecast if available
       const fEl = document.getElementById('forecast');
       if(fEl && data.daily && data.daily.time){
