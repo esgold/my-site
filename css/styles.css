@@ -129,7 +129,7 @@ h4{margin:6px 0}
 .weather-wrap{position:relative;display:inline-block}
 .weather-card{
   background: linear-gradient(180deg, rgba(0,0,0,0.03), rgba(0,0,0,0.02));
-  padding:10px 14px;border-radius:12px;display:flex;align-items:center;justify-content:center;gap:12px;
+  padding:10px 20px 10px 10px;border-radius:12px;display:flex;align-items:center;justify-content:center;gap:12px;
   box-shadow: 0 6px 20px rgba(0,0,0,0.08);min-width:160px;max-width:220px;
   transition:box-shadow .18s ease, transform .18s ease;
 }
