@@ -13,23 +13,23 @@
 	<body>
 		<header class="site-header">
 			<div class="container header-inner">
-				<h1 class="logo">Erin</h1>
+				<h1 class="logo">erin gold</h1>
+				<!-- Weather widget centered in nav -->
+				<div class="weather-anchor">
+					<div id="forecast" class="forecast-panel" aria-hidden="true">
+						<!-- forecast days will be injected here -->
+					</div>
+					<div class="weather-wrap" aria-hidden="false">
+						<div id="weather" class="weather-card" role="region" aria-live="polite">
+							<div class="weather-main">Loading weather…</div>
+						</div>
+					</div>
+				</div>
 				<nav class="top-nav" aria-label="Primary">
 					<a href="about.html">About</a>
 					<a href="work.html">Work</a>
 					<a href="contact.html">Contact</a>
 				</nav>
-							<!-- Weather widget (anchor stays fixed; widget can slide left to reveal forecast) -->
-							<div class="weather-anchor" style="position:relative;display:inline-block">
-								<div id="forecast" class="forecast-panel" aria-hidden="true">
-									<!-- forecast days will be injected here -->
-								</div>
-								<div class="weather-wrap" aria-hidden="false">
-									<div id="weather" class="weather-card" role="region" aria-live="polite">
-										<div class="weather-main">Loading weather…</div>
-									</div>
-								</div>
-							</div>
 			</div>
 		</header>
 
