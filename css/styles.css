@@ -114,8 +114,9 @@ h4{margin:6px 0}
 .work.container{padding-top:24px}
 .site-footer{padding:28px 0;background:#f5f3f0;position:relative;z-index:180}
 .site-footer, .footer-inner{background:#f5f3f0}
-.footer-inner{display:flex;align-items:center;justify-content:space-between;color:var(--muted);max-width:var(--container);margin:0 auto;padding:0 20px}
-.small-nav a{color:var(--muted);text-decoration:none;margin-left:12px}
+.footer-inner{display:flex;align-items:center;justify-content:space-between;color:#1a1a1a;max-width:var(--container);margin:0 auto;padding:0 20px}
+.small-nav a{color:#1a1a1a;text-decoration:none;margin-left:12px;font-size:16px;font-weight:500;padding-bottom:2px;border-bottom:1px solid transparent;transition:border-color .15s ease}
+.small-nav a:hover{border-bottom-color:#1a1a1a}
 
 @media (max-width:900px){
   .hero-grid{grid-template-columns:1fr;}
@@ -156,8 +157,8 @@ h4{margin:6px 0}
 
 /* top navigation in header */
 .top-nav{display:flex;gap:24px;align-items:baseline;margin-left:auto}
-.top-nav a{color:#1a1a1a;text-decoration:none;font-size:16px;font-weight:500}
-.top-nav a:hover{color:#1a1a1a}
+.top-nav a{color:#1a1a1a;text-decoration:none;font-size:16px;font-weight:500;padding-bottom:2px;border-bottom:1px solid transparent;transition:border-color .15s ease}
+.top-nav a:hover{color:#1a1a1a;border-bottom-color:#1a1a1a}
 
 /* Weather widget centered horizontally in nav row.
    On hover the forecast appears to the right; the anchor shifts left
